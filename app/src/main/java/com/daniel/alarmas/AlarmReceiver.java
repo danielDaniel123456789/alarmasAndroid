@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -60,13 +61,17 @@ public class AlarmReceiver extends BroadcastReceiver {
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+            // Ruta al archivo de sonido personalizado dentro de la carpeta 'sonidos'
+            Uri soundUri = Uri.parse("android.resource://" + context.getPackageName() + "/raw/sonidos/alarma");
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(android.R.drawable.ic_dialog_info)
                     .setContentTitle("¡Saludo!")
                     .setContentText("Haz clic para ver la historia")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
+                    .setAutoCancel(true)
+                    .setSound(soundUri); // Usar el sonido personalizado desde la carpeta 'sonidos'
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(NOTIFICATION_ID, builder.build());
