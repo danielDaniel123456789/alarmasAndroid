@@ -44,7 +44,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private void showNotification(Context context) {
         try {
-            // Verificar permisos para Android 13+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ActivityCompat.checkSelfPermission(context, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(context, "Permiso de notificaciones no concedido", Toast.LENGTH_SHORT).show();
@@ -52,9 +51,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
 
-            // ✅ Intent para abrir el navegador con la URL deseada
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(android.net.Uri.parse("https://danieldaniel123456789.github.io/clasesIngles/historias/index.html"));
+            // Intent para abrir la actividad WebViewActivity
+            Intent intent = new Intent(context, WebViewActivity.class);
 
             PendingIntent pendingIntent = PendingIntent.getActivity(
                     context,
@@ -62,7 +60,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-            // Construir la notificación
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(android.R.drawable.ic_dialog_info)
                     .setContentTitle("¡Saludo!")
@@ -71,7 +68,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);
 
-            // Mostrar la notificación
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(NOTIFICATION_ID, builder.build());
 
